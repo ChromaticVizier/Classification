@@ -92,4 +92,8 @@ plt.title("Training and validation accuracy")
 plt.xlabel("Epochs")
 plt.ylabel("Accuracy")
 plt.legend()
+
+results = model.evaluate(x_test, y_test)
+print(results)
+
 plt.show()
