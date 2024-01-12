@@ -23,8 +23,6 @@ import matplotlib.pyplot as plt
 #         [reverse_word_index.get(i - 3, "?") for i in train_data[x]]
 #     )
 #     print(decoded_newswire)
-#
-# decoding(0)
 
 def vectorize_sequences(sequences, dimension=10000):
     results = np.zeros((len(sequences), dimension))
@@ -72,28 +70,60 @@ history = model.fit(partial_x_train,
                     batch_size=512,
                     validation_data=(x_val, y_val))
 
-loss = history.history["loss"]
-val_loss = history.history["val_loss"]
-epochs = range(1, len(loss) + 1)
-plt.subplot(3, 1, 1)
-plt.plot(epochs, loss, "bo", label="Training loss")
-plt.plot(epochs, val_loss, "b", label="Validation")
-plt.title("Training and validation loss")
-plt.xlabel("Epochs")
-plt.ylabel("Loss")
-plt.legend()
+# loss = history.history["loss"]
+# val_loss = history.history["val_loss"]
+# epochs = range(1, len(loss) + 1)
+# plt.subplot(3, 1, 1)
+# plt.plot(epochs, loss, "bo", label="Training loss")
+# plt.plot(epochs, val_loss, "b", label="Validation")
+# plt.title("Training and validation loss")
+# plt.xlabel("Epochs")
+# plt.ylabel("Loss")
+# plt.legend()
+#
+# plt.subplot(3, 1, 3)
+# acc = history.history["accuracy"]
+# val_acc = history.history["val_accuracy"]
+# plt.plot(epochs, acc, "bo", label="Training accuracy")
+# plt.plot(epochs, val_acc, "b", label="Validation accuracy")
+# plt.title("Training and validation accuracy")
+# plt.xlabel("Epochs")
+# plt.ylabel("Accuracy")
+# plt.legend()
+#
+# plt.show()
 
-plt.subplot(3, 1, 3)
-acc = history.history["accuracy"]
-val_acc = history.history["val_accuracy"]
-plt.plot(epochs, acc, "bo", label="Training accuracy")
-plt.plot(epochs, val_acc, "b", label="Validation accuracy")
-plt.title("Training and validation accuracy")
-plt.xlabel("Epochs")
-plt.ylabel("Accuracy")
-plt.legend()
+# results = model.evaluate(x_test, y_test)
+# print(results)
+
+def pridict_result(x, x_test):
+    predictions = model.predict(x_test)
+    return np.argmax(predictions[x])
+
+model = keras.Sequential([
+    layers.Dense(64, activation="relu"),
+    layers.Dense(4, activation="relu"),
+    layers.Dense(46, activation="softmax")
+])
+
+model.compile(optimizer="rmsprop",
+              loss="categorical_crossentropy",
+              metrics=["accuracy"])
+
+model.fit(partial_x_train,
+          partial_y_train,
+          epochs=20,
+          batch_size=128,
+          validation_data=(x_val, y_val))
 
 results = model.evaluate(x_test, y_test)
 print(results)
 
-plt.show()
+# def Hand_test():
+#     print("Please input the index you want to test:")
+#     x = int(input())
+#     print("The prediction is: ", pridict_result(x, x_test))
+#     print("the correct answer is: ", np.argwhere(x_test == 1))
+#
+# Hand_test()
+
